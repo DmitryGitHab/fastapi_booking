@@ -3,7 +3,7 @@ from app.database import Base
 
 
 class Hotels(Base):
-    __tablname__ = "hotels"
+    __tablename__ = "hotels"
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
