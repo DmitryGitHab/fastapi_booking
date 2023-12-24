@@ -10,10 +10,19 @@ router = APIRouter(
     prefix='/bookings',
     tags=['Бронирование']
 )
-#
+
+
 @router.get('')
 async def get_bookings():
     return await BookingDAO.find_all()
+
+# @router.get('')
+# async def get_bookings():
+#     return await BookingDAO.find_by_id(3)
+
+# @router.get('')
+# async def get_bookings():
+#     return await BookingDAO.find_one_or_none(price=24500)
 
 # @router.get('/{user_id}')
 # async def get_bookings_join(user_id:int):
