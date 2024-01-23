@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI, Query, Depends
 from typing import Optional
 from datetime import date

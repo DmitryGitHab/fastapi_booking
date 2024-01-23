@@ -2,5 +2,7 @@ fastapi[all]~=0.104.1
 sqlalchemy~=2.0.23
 alembic~=1.13.0
 asyncpg
+passlib==1.7.4
+python-jose==3.3.0
 
 pydantic~=2.5.2
