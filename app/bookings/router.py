@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from sqlalchemy import select
 
 from app.bookings.dao import BookingDAO
@@ -14,8 +14,16 @@ router = APIRouter(
 
 
 @router.get('')
-async def get_bookings() -> list[SBooking]:
+async def get_bookings(user): #-> list[SBooking]:
     return await BookingDAO.find_all()
+
+# @router.get('')
+# async def get_bookings(request: Request): #-> list[SBooking]
+#     print(request.cookies)
+#     print(request.url)
+#     print(request.client)
+#     return dir(request)
+#     # return await BookingDAO.find_all()
 
 # @router.get('')
 # async def get_bookings():
