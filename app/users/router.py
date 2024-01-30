@@ -1,6 +1,8 @@
-from fastapi import APIRouter, HTTPException, status, Response
+from fastapi import APIRouter, HTTPException, status, Response, Depends
 
 from app.users.dao import UsersDAO
+from app.users.dependencies import get_current_user
+from app.users.models import Users
 from app.users.schemas import SUserAuth
 from app.users.auth import get_password_hash, verif_pasword, authenticate_user, create_access_token
 
@@ -27,3 +29,12 @@ async def register_user(response: Response, user_data: SUserAuth):
     access_token = create_access_token({"sub": str(user.id)})
     response.set_cookie("booking_access_token", access_token, httponly=True)
     return access_token
+
+@router.post('/logout')
+async def logout_user(response: Response):
+    response.delete_cookie("booking_access_token")
+    return f'user has been logout'
+
+@router.get("/me")
+async def read_users_me(current_user: Users = Depends(get_current_user)):
+    return current_user
