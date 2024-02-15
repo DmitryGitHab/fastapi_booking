@@ -1,9 +1,14 @@
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from sqlalchemy import JSON, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.database import Base
 
+if TYPE_CHECKING:
+    # Убирает предупреждения отсутствия импорта и неприятные подчеркивания в
+    # PyCharm и VSCode
+    from app.hotels.models import Hotels
+    from app.bookings.models import Bookings
 
 # Модель написана в соответствии с современным стилем Алхимии (версии 2.x)
 class Rooms(Base):

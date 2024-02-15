@@ -8,6 +8,7 @@ from app.hotels.rooms.models import Rooms
 from app.database import async_session_maker
 from app.users.dependencies import get_current_user
 from app.users.models import Users
+from datetime import date
 
 router = APIRouter(
     prefix='/bookings',
@@ -23,10 +24,10 @@ async def get_bookings(user: Users = Depends(get_current_user)) -> list[SBooking
 
 @router.post('')
 async def add_bookings(
+        room_id: int, date_from: date, date_to: date,
         user: Users = Depends(get_current_user),
 ):
-    await BookingDAO.add(user_id=user.id)
-
+    await BookingDAO.add(user.id, room_id, date_from, date_to)
 
 # @router.get('')
 # async def get_bookings(request: Request): #-> list[SBooking]

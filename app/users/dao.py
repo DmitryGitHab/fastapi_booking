@@ -1,10 +1,10 @@
-from app.dao.base import BaseDAO
+
 from app.users.models import Users
+from app.dao.base import BaseDAO
+
 
 
 class UsersDAO(BaseDAO):
     model = Users
 
-    @classmethod
-    async def add(cls):
-        pass
+
