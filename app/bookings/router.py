@@ -29,6 +29,7 @@ async def add_bookings(
 ):
     await BookingDAO.add(user.id, room_id, date_from, date_to)
 
+
 # @router.get('')
 # async def get_bookings(request: Request): #-> list[SBooking]
 #     print(request.cookies)

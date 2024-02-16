@@ -3,6 +3,9 @@ from sqlalchemy import Column, Computed, Date, ForeignKey, Integer
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 from app.database import Base
+from app.users.models import Users
+from app.hotels.models import Hotels
+from app.hotels.rooms.models import Rooms
 
 
 # Модель написана в соответствии с современным стилем Алхимии (версии 2.x)
