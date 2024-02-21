@@ -158,5 +158,24 @@ class BookingDAO(BaseDAO):
             print(rooms_left)
             return rooms_left
 
+            if rooms_left > 0:
+                get_price = select(Rooms.price).filter_by(id=room_id)
+                price = await session.execute(get_price)
+                price: int = price.scalar()
+                add_booking = insert(Bookings).values(
+                    room_id=room_id,
+                    user_id=user_id,
+                    date_from=date_from,
+                    date_to=date_to,
+                    price=price,
+                ).returning(Bookings)
+
+                new_booking = await session.execute(add_booking)
+                await sessiom.commit()
+                return new_booking.scalar()
+
+            else:
+                return None
+
         # except:
         #     print('error')
