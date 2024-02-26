@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends, BackgroundTasks
+from pydantic import TypeAdapter
 from sqlalchemy import select
 
 from app.bookings.dao import BookingDAO
 from app.bookings.models import Bookings
-from app.bookings.schemas import SBooking
-from app.exception import RoomFullyBooked
+from app.bookings.schemas import SBooking, SNewBooking
+from app.exception import RoomFullyBooked, RoomCannotBeBooked
 from app.hotels.rooms.models import Rooms
 from app.database import async_session_maker
 from app.users.dependencies import get_current_user
@@ -23,14 +24,46 @@ async def get_bookings(user: Users = Depends(get_current_user)) -> list[SBooking
     return await BookingDAO.find_all(user_id=user.id)
     # return await BookingDAO.find_all()
 
+# @router.post("", status_code=201)
+# async def add_booking(
+#     booking: SNewBooking,
+#     background_tasks: BackgroundTasks,
+#     user: Users = Depends(get_current_user),
+# ):
+#     booking = await BookingDAO.add(
+#         user.id,
+#         booking.room_id,
+#         booking.date_from,
+#         booking.date_to,
+#     )
+#     if not booking:
+#         raise RoomCannotBeBooked
+#     # TypeAdapter и model_dump - это новинки новой версии Pydantic 2.0
+#     booking = TypeAdapter(SNewBooking).validate_python(booking).model_dump()
+#     # Celery - отдельная библиотека
+#     # send_booking_confirmation_email.delay(booking, user.email)
+#     # Background Tasks - встроено в FastAPI
+#     # background_tasks.add_task(send_booking_confirmation_email, booking, user.email)
+#     return booking
+
+
 @router.post('')
 async def add_bookings(
-        room_id: int, date_from: date, date_to: date,
+        booking: SNewBooking,
+        background_tasks: BackgroundTasks,
+        # room_id: int, date_from: date, date_to: date,
         user: Users = Depends(get_current_user),
 ):
-    booking = await BookingDAO.add(user.id, room_id, date_from, date_to)
+    booking = await BookingDAO.add(
+        user.id,
+        booking.room_id,
+        booking.date_from,
+        booking.date_to,
+    )
     if not booking:
         raise RoomFullyBooked
+    booking = TypeAdapter(SNewBooking).validate_python(booking).model_dump()
+    return booking
 
 
 # @router.get('')
